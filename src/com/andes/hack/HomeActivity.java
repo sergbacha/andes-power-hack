@@ -1,6 +1,7 @@
 package com.andes.hack;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class HomeActivity extends Activity
@@ -11,5 +12,7 @@ public class HomeActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+    	startActivity(new  Intent(this, ModelInfoActivity.class));
     }
 }
