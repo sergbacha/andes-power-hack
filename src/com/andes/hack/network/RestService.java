@@ -4,6 +4,9 @@
 
 package com.andes.hack.network;
 
+import java.net.URL;
+import java.net.URLEncoder;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
@@ -28,6 +31,8 @@ public class RestService extends IntentService {
 	
 	/** The API of our intent service. The actions we want completed */
 	public static final int ACTION_SEND_SMS = 1;
+
+	public static final int ACTION_SEND_SMS_COMMENT = 2;
 	
 
 	/** Our Jackson Json Mapper */
@@ -66,20 +71,45 @@ public class RestService extends IntentService {
 		switch(match) {
 			case ACTION_SEND_SMS:{
 				Log.d(TAG, "We have set a create user rest request");
-				
 				// get the values of the new user
 				ContentValues values = (ContentValues) intent.getExtras().get(EXTRA_SMS_INFO);
-				
-			
 				sendSMS(values);
 				
 				return;
 			}
-
+			case ACTION_SEND_SMS_COMMENT:{
+				Log.d(TAG, "We have set a create user rest request");
+				// get the values of the new user
+				ContentValues values = (ContentValues) intent.getExtras().get(EXTRA_SMS_INFO);
+				sendSMSComment(values);
+				
+				return;
+			}
 			default:
 				return;
 		}
 
+	}
+
+	/**
+	 * @param values
+	 */
+	private void sendSMSComment(ContentValues values) {
+		//create the root node
+		JsonNode rootNode = mJsonMapper.createObjectNode();
+		
+		// get model number
+		String phoneNumber = values.getAsString(Constants.VALUE_PHONE_NUMBER);
+		
+
+		StringBuilder sb =new StringBuilder();
+		sb.append("address="+phoneNumber+"&message=comment");
+		
+		SMSRestMethodInvoker invoker = SMSRestMethodInvoker.buildRestMethodInvoker(this);
+		invoker.post(mJsonMapper, sb.toString());
+		
+		
+		
 	}
 
 	/**
@@ -95,15 +125,13 @@ public class RestService extends IntentService {
 		// add the one-under user node
 		
 		((ObjectNode)rootNode).put(Constants.SMS_ADDRESS_FIELD, phoneNumber);
-		((ObjectNode)rootNode).put(Constants.SMS_MESSAGE_FIELD, "You've been liked");
+		((ObjectNode)rootNode).put(Constants.SMS_MESSAGE_FIELD, URLEncoder.encode("address=13012549378&message=hello"));
 		
-		
-		
-		String data = rootNode.toString();
-		
+		StringBuilder sb =new StringBuilder();
+		sb.append("address="+phoneNumber+"&message=like");
 		
 		SMSRestMethodInvoker invoker = SMSRestMethodInvoker.buildRestMethodInvoker(this);
-		JsonNode response = invoker.post(mJsonMapper, data);
+		invoker.post(mJsonMapper, sb.toString());
 		
 		
 		

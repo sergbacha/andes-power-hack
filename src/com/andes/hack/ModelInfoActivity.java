@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 /**
  * @author 	Sergio Bernales
@@ -31,6 +32,7 @@ public class ModelInfoActivity extends Activity implements ActionBarListener, On
 	int modelID = 1;
 	
 	ServiceHelper mRestServiceHelper;
+	final String baseEntityKey = "http://www.quickvote.com/";
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -40,11 +42,15 @@ public class ModelInfoActivity extends Activity implements ActionBarListener, On
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		final String entityKey = "http://www.quickvote.com/1";
+		
+		
+		String id = getIntent().getExtras().getString("voteID");
+		
+		String entityString = baseEntityKey+id;
 		
 		// Create an entity object including a name
         // The Entity object is Serializable, so you could also store the whole object in the Intent
-        Entity entity = Entity.newInstance(entityKey, "Socialize");
+        Entity entity = Entity.newInstance(entityString, "Socialize");
 
         // Wrap your existing view with the action bar.
         // your_layout refers to the resource ID of your current layout.
@@ -54,6 +60,8 @@ public class ModelInfoActivity extends Activity implements ActionBarListener, On
         setContentView(actionBarWrapped);
         
         mRestServiceHelper = new ServiceHelper();
+        
+        
 	}
 
 	/* (non-Javadoc)
@@ -140,7 +148,12 @@ public class ModelInfoActivity extends Activity implements ActionBarListener, On
 	 */
 	@Override
 	public void onUpdate(ActionBarView arg0) {
-		// TODO Auto-generated method stub
+		
+		ContentValues values = new ContentValues(1);
+		
+		values.put(Constants.VALUE_PHONE_NUMBER, Constants.modelNumbers[this.modelID]);
+		
+		mRestServiceHelper.sendSMSComment(this, values);
 		
 	}
 }

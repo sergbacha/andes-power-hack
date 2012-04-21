@@ -13,6 +13,9 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-    	startActivity(new  Intent(this, ModelInfoActivity.class));
+        Intent i = new Intent(this, ModelInfoActivity.class);
+        i.putExtra("voteID", "1");
+        
+    	startActivity(i );
     }
 }

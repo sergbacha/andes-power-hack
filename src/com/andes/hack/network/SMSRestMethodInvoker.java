@@ -68,7 +68,7 @@ public class SMSRestMethodInvoker implements HttpHelper{
 	 * 
 	 * @param newUser the JSON data we will add to our request body
 	 */
-	public JsonNode post(final ObjectMapper jsonMapper, final String jsonData) {
+	public JsonNode post(final ObjectMapper jsonMapper, final String data) {
 		JsonNode postResponse = null;
 		
 		try {
@@ -103,14 +103,14 @@ public class SMSRestMethodInvoker implements HttpHelper{
 //			// add data to connection
 //			final String data = jsonData.toJsonString(jsonMapper);
 //			/** Performance suggestions per ANdroid javadocs HttpURLConnection*/
-			mHttpsURLConnection.setFixedLengthStreamingMode(jsonData.length());
+			mHttpsURLConnection.setFixedLengthStreamingMode(data.length());
 			
 
 			// remember we set http.keepalive in IntroActivity to false
 			
 			// send the output // could also use DataOutputStream
 			BufferedOutputStream output = new BufferedOutputStream(mHttpsURLConnection.getOutputStream());
-			output.write(jsonData.getBytes());
+			output.write(data.getBytes());
 			output.flush();
 			
 //			output.close();
