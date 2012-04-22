@@ -61,6 +61,10 @@ public class ModelInfoActivity extends Activity implements ActionBarListener, On
         
         mRestServiceHelper = new ServiceHelper();
         
+        View v = findViewById(R.id.outer);
+        
+        v.setBackgroundDrawable(R.)
+        
         
 	}
 
